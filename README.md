@@ -53,7 +53,7 @@
 
 ### 1. 下载
 
-从 [Releases](https://github.com/<your-username>/RPush-Pro/releases) 页下载最新 `.dmg`，挂载后将 `RPush.app` 拖到 `Applications`。
+从 [Releases](https://github.com/huangboju/RPush-Pro/releases) 页下载最新 `.dmg`，挂载后将 `RPush.app` 拖到 `Applications`。
 
 > 当前 Release 为 ad-hoc 签名（未走 Notarization），首次打开请右键 → 打开 → 在弹窗里再点「打开」绕过 Gatekeeper。
 > 如果遇到「已损坏」提示，运行 `xattr -dr com.apple.quarantine /Applications/RPush.app` 即可。
@@ -91,7 +91,7 @@
 需求：Xcode 12 +、macOS 10.15 +。
 
 ```bash
-git clone https://github.com/<your-username>/RPush-Pro.git
+git clone https://github.com/huangboju/RPush-Pro.git
 cd RPush-Pro
 open RPush/RPush.xcodeproj
 ```

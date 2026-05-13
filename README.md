@@ -40,12 +40,7 @@
 
 ## 📸 截图
 
-<!-- 截图请在新版 UI 下重新捕获，原版截图与当前 UI 已不一致。 -->
-
-| 鉴权方式 | 截图 |
-|---|---|
-| 证书 (.cer) | `RPush/screenshots/certificate_based_screenshot.png`（旧版，待更新） |
-| Token (.p8) | `RPush/screenshots/token_auth_based_screenshot.png`（旧版，待更新） |
+![]('RPush-Pro/RPush/screenshots/Screenshot 2026-05-13 at 14.09.53.png')
 
 ---
 

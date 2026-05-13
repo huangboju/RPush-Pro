@@ -40,7 +40,7 @@
 
 ## 📸 截图
 
-![]('RPush-Pro/RPush/screenshots/Screenshot 2026-05-13 at 14.09.53.png')
+![RPush 截图](RPush/screenshots/Screenshot%202026-05-13%20at%2014.09.53.png)
 
 ---
 
@@ -78,6 +78,105 @@
 ### 3. 历史回填
 
 侧边栏「历史推送」会保存最近 100 条记录，双击任意一条即可把所有字段（Token / Payload / Bundle ID / Key ID / Team ID / 鉴权方式 / 环境）一键回填到发送页面，方便复测。
+
+---
+
+## 🔑 APNs Token 认证配置指南
+
+本节介绍如何从 Apple Developer 后台获取 RPush Token 鉴权所需的 **P8 文件**、**Team ID**、**Key ID** 和 **Bundle ID**。
+
+### 1. 获取 Team ID
+
+Team ID 是你的 Apple 开发者团队唯一标识符。
+
+1. 登录 [Apple Developer](https://developer.apple.com/account)
+2. 在左侧菜单点击 **Membership details**（会员详情）
+3. 页面中会显示 **Team ID**，格式为 10 位字母数字组合（例如：`A1B2C3D4E5`）
+
+> 也可以在 Xcode 中查看：菜单栏 **Xcode > Settings > Accounts**，选中你的 Apple ID，右侧会显示 Team ID。
+
+### 2. 获取 Bundle ID
+
+Bundle ID 是你的 App 的唯一标识符。
+
+**方式一：从 Apple Developer 后台获取**
+
+1. 登录 [Apple Developer](https://developer.apple.com/account)
+2. 进入 **Certificates, Identifiers & Profiles**
+3. 左侧菜单点击 **Identifiers**
+4. 找到你的 App，点击进入详情
+5. **Bundle ID** 显示在页面顶部（例如：`com.yourcompany.yourapp`）
+
+**方式二：从 Xcode 项目获取**
+
+1. 打开你的 Xcode 项目
+2. 点击项目导航中的项目文件（蓝色图标）
+3. 选择对应的 Target
+4. 在 **General** 标签页中查看 **Bundle Identifier**
+
+### 3. 创建 APNs Auth Key（P8 文件）并获取 Key ID
+
+P8 文件是用于 APNs Token 认证的私钥文件，创建时会同时获得 Key ID。
+
+1. 登录 [Apple Developer](https://developer.apple.com/account)
+2. 进入 **Certificates, Identifiers & Profiles**
+3. 左侧菜单点击 **Keys**
+4. 点击右上角的 **+** 按钮（Create a Key）
+5. 填写 **Key Name**（自定义名称，例如：`APNs Push Key`）
+6. 勾选 **Apple Push Notifications service (APNs)**
+7. 点击 **Continue**，然后点击 **Register**
+8. 注册完成后页面会显示：
+   - **Key ID**：10 位字母数字组合（例如：`AB12CD34EF`）
+   - **Download** 按钮：点击下载 `.p8` 文件
+
+> **⚠️ 重要提示**
+> - P8 文件**只能下载一次**，请妥善保管。如果丢失，需要撤销（Revoke）旧 Key 并重新创建。
+> - 每个开发者账号最多创建 **2 个** APNs Auth Key。
+> - 一个 Auth Key 可以用于该账号下**所有 App** 的推送，无需为每个 App 单独创建。
+
+下载的文件名格式为 `AuthKey_<KeyID>.p8`（例如：`AuthKey_AB12CD34EF.p8`），内容类似：
+
+```
+-----BEGIN PRIVATE KEY-----
+MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQg...
+-----END PRIVATE KEY-----
+```
+
+### 4. 在 RPush 中使用
+
+获取以上信息后，在 RPush 中按以下步骤操作：
+
+1. 鉴权方式选择 **Token Authentication Based**
+2. 填入 **Bundle ID**（例如：`com.yourcompany.yourapp`）
+3. 填入 **Key ID**（例如：`AB12CD34EF`）
+4. 填入 **Team ID**（例如：`A1B2C3D4E5`）
+5. 点击上传按钮，选择下载的 `.p8` 文件
+6. 填入目标设备的 **Device Token**
+7. 编辑 Payload 内容
+8. 选择推送环境（开发 / 生产）
+9. 点击 **推送消息**（或 `⌘↵`）
+
+### 5. 常见问题
+
+**Q: P8 文件和推送证书（.cer/.p12）有什么区别？**
+
+| 对比项   | P8 (Token 认证) | 推送证书 (证书认证) |
+| -------- | --------------- | ------------------- |
+| 有效期   | 永不过期        | 1 年，需定期更新    |
+| 适用范围 | 账号下所有 App  | 仅绑定的单个 App    |
+| 环境区分 | 同一个 Key 通用 | 开发/生产证书分开   |
+| 连接方式 | 基于 JWT Token  | 基于 TLS 证书       |
+
+**Q: Key ID 在哪里再次查看？**
+
+登录 Apple Developer → Certificates, Identifiers & Profiles → Keys，点击对应的 Key 即可查看 Key ID。
+
+**Q: 推送失败怎么排查？**
+
+1. 确认 Bundle ID 与目标 App 一致
+2. 确认 Device Token 正确且未过期
+3. 确认推送环境选择正确（开发用 sandbox，上架用 production）
+4. 确认 P8 文件、Key ID、Team ID 属于同一个开发者账号
 
 ---
 
